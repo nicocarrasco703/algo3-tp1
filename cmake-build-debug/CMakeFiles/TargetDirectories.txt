@@ -1,0 +1,3 @@
+/home/tobias/Escritorio/Algo3/algo3-tp1/cmake-build-debug/CMakeFiles/untitled1.dir
+/home/tobias/Escritorio/Algo3/algo3-tp1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/tobias/Escritorio/Algo3/algo3-tp1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

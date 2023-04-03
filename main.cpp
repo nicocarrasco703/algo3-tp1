@@ -1,21 +1,22 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 int n;
 int k;
 int numeroMagico;
-vector<int> v;
+vector<int> usados;
 vector<vector<int>> m;
 int cont = 0;
 
 bool filaSuperaNumero(int fila , int sum){
     bool res;
-    int suma = 0;
+    int sumaFila = 0;
     for(int j = 0; j < n; j++){
-        suma = suma + m[fila][j];
+        sumaFila = sumaFila + m[fila][j];
     }
-    res = suma > numeroMagico;
+    res = sumaFila > numeroMagico;
     return res;
 }
 
@@ -30,32 +31,38 @@ bool columnaSuperaNumero(int col, int sum){
 }
 
 bool esMagico() {
-    int row_sum, col_sum, diag_sum1, diag_sum2;
+    int sumaFila;
+    int sumaColumna;
+    int sumaDiagonal1;
+    int sumaDiagonal2;
     for (int i = 0; i < n; i++) {
-        row_sum = col_sum = 0;
+        sumaFila = sumaColumna = 0;
         for (int j = 0; j < n; j++) {
-            row_sum += m[i][j];
-            col_sum += m[j][i];
+            sumaFila += m[i][j];
+            sumaColumna += m[j][i];
             if (filaSuperaNumero(i, numeroMagico) || columnaSuperaNumero(i, numeroMagico)) {
                 return false; // poda si la suma excede la suma mágica
             }
         }
-        if (row_sum != numeroMagico || col_sum != numeroMagico) {
-            return false;
-        }
+        if (sumaFila != numeroMagico || sumaColumna != numeroMagico) return false;
     }
-    diag_sum1 = diag_sum2 = 0;
+    sumaDiagonal1 = sumaDiagonal2 = 0;
     for (int i = 0; i < n; i++) {
-        diag_sum1 += m[i][i];
-        diag_sum2 += m[i][n-i-1];
+        sumaDiagonal1 += m[i][i];
+        sumaDiagonal2 += m[i][n-i-1];
     }
-    if (diag_sum1 != numeroMagico || diag_sum2 != numeroMagico) {
+    if (sumaDiagonal1 != numeroMagico || sumaDiagonal2 != numeroMagico) {
         return false;
     }
     return true;
 }
 
-
+int sumaDeFila(int i, int j){
+    int sumx = 0;
+    for(int i = 0; i < n; i++){
+        sumx = sumx + m[i][j];
+    }
+}
 
 bool construirCuadrado(int i, int j){
     int prox_i;
@@ -77,32 +84,30 @@ bool construirCuadrado(int i, int j){
             prox_i = i + 1;
             prox_j = 0;
         }
-        if (m[i][j] == 0) {
-            for (int x = 1;x <= n*n; x++) {
-                if (v[x - 1] == 0) {                        //v es un vector de 0 a n^2 que me dice si el elemento x esta usado o no en la matriz
-                    m[i][j] = x;
-                    v[x - 1] = 1;
-                    //if(!filaSuperaNumero(i , numeroMagico) && !columnaSuperaNumero(j, numeroMagico)){
-                        //construirCuadrado(prox_i, prox_j);
-                    //}
-                    if(construirCuadrado(prox_i, prox_j)){
+        if(m[i][j] == 0) {
+            for (int x = 0; x < n * n; x++) {
+                if (usados[x + 1] == 0) {
+                    m[i][j] = x + 1;
+                    usados[x + 1] = 1;
+                    if (!filaSuperaNumero(i, numeroMagico) && !columnaSuperaNumero(j, numeroMagico) &&
+                        construirCuadrado(prox_i, prox_j))
                         return true;
-                    }
-                    v[x - 1] = 0;
-                    construirCuadrado(i, j);
+                    usados[x + 1] = 0;
                 }
+                m[i][j] = 0;
             }
-        } else construirCuadrado(prox_i, prox_j);
+        }
     }
+    return false;
 }
 
 
 int main(){
     cin >> n;
     cin >> k;
-    numeroMagico = ((n * n * n +n)/2);
+    numeroMagico = ((pow(n,3)+ n)/2);
     m = vector(n, vector<int>(n, 0));
-    v = vector(n*n, 0);
+    usados = vector(n*n, 0);
     if (construirCuadrado(0, 0)) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {

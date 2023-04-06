@@ -27,9 +27,6 @@ bool esMagico() {
         for (int j = 0; j < n; j++) {
             sumaFila += m[i][j];
             sumaColumna += m[j][i];
-            if (sumaFila > numeroMagico || sumaColumna > numeroMagico) {
-                return false;
-            }
         }
         if (sumaFila != numeroMagico || sumaColumna != numeroMagico) return false;
     }

@@ -9,39 +9,39 @@ int numeroMagico;
 vector<int> usados;
 vector<vector<int>> m;
 int cont = 0;
+int sumaParcialFila;
+vector<int> fil;
+vector<int> col;
+int sumaFila;
+int sumaColumna;
+int sumaDiagonal1;
+int sumaDiagonal2;
 
-bool filaSuperaNumero(int fila , int sum){
+
+bool esDiagonal1(int i, int j){              //esta funcion y la de la otra diagonal por ahora no las estamos usando. no implementamos aun una poda con las diagoanales.
     bool res;
-    int sumaFila = 0;
-    for(int j = 0; j < n; j++){
-        sumaFila = sumaFila + m[fila][j];
-    }
-    res = sumaFila > numeroMagico;
+    if(i == j) res = true;
+    else res = false;
     return res;
 }
 
-bool columnaSuperaNumero(int col, int sum){
+bool esDiagonal2(int i, int j){
     bool res;
-    int suma = 0;
-    for(int i = 0; i < n; i++){
-        suma = suma + m[i][col];
-    }
-    res = suma > numeroMagico;
+    if(j == n - i - 1) res = true;
+    else res = false;
     return res;
 }
+
 
 bool esMagico() {
-    int sumaFila;
-    int sumaColumna;
-    int sumaDiagonal1;
-    int sumaDiagonal2;
     for (int i = 0; i < n; i++) {
-        sumaFila = sumaColumna = 0;
+        sumaFila = 0;
+        sumaColumna = 0;
         for (int j = 0; j < n; j++) {
             sumaFila += m[i][j];
             sumaColumna += m[j][i];
-            if (filaSuperaNumero(i, numeroMagico) || columnaSuperaNumero(i, numeroMagico)) {
-                return false; // poda si la suma excede la suma mágica
+            if (sumaFila > numeroMagico || sumaColumna > numeroMagico) {
+                return false;
             }
         }
         if (sumaFila != numeroMagico || sumaColumna != numeroMagico) return false;
@@ -57,48 +57,45 @@ bool esMagico() {
     return true;
 }
 
-int sumaDeFila(int i, int j){
-    int sumx = 0;
-    for(int i = 0; i < n; i++){
-        sumx = sumx + m[i][j];
-    }
-}
 
-bool construirCuadrado(int i, int j){
-    int prox_i;
-    int prox_j;
+bool construirCuadrado(int i, int j, vector<int> sumFil, vector<int> sumCol){
     if(i == n){
-        if(esMagico()) {
+        if(esMagico()){
             cont++;
-            if(cont == k){
-                return true;
-            }
+            if(cont == k) return true;
         }
-    }
-    else {
-        if(j + 1 < n){
-            prox_i = i;
-            prox_j = j + 1;
-        }
-        else {
-            prox_i = i + 1;
-            prox_j = 0;
-        }
-        if(m[i][j] == 0) {
-            for (int x = 0; x < n * n; x++) {
-                if (usados[x + 1] == 0) {
+    } else {
+        if(m[i][j] == 0){
+            for(int x = 0; x < n*n; x++){
+                if(usados[x+1] == 0){
                     m[i][j] = x + 1;
                     usados[x + 1] = 1;
-                    if (!filaSuperaNumero(i, numeroMagico) && !columnaSuperaNumero(j, numeroMagico) &&
-                        construirCuadrado(prox_i, prox_j))
-                        return true;
-                    usados[x + 1] = 0;
+                    sumFil[i] += x + 1;
+                    sumCol[j] += x + 1;
+                    if(j + 1 < n){
+                        if(sumFil[i] < numeroMagico && !(sumCol[j] > numeroMagico) && construirCuadrado(i, j + 1, sumFil, sumCol))
+                            return true;
+                        else{
+                            m[i][j] = 0;
+                            sumFil[i] -= x + 1;
+                            sumCol[j] -= x + 1;
+                            usados[x + 1] = 0;
+
+                        }
+                    } else {
+                        if(sumFil[i] == numeroMagico && !(sumCol[j] > numeroMagico) && construirCuadrado(i + 1, 0, sumFil, sumCol))
+                            return true;
+                        else{
+                            m[i][j] = 0;
+                            sumFil[i] -= x + 1;
+                            sumCol[j] -= x + 1;
+                            usados[x + 1] = 0;
+                        }
+                    }
                 }
-                m[i][j] = 0;
             }
         }
-    }
-    return false;
+    } return false;
 }
 
 
@@ -108,7 +105,10 @@ int main(){
     numeroMagico = ((pow(n,3)+ n)/2);
     m = vector(n, vector<int>(n, 0));
     usados = vector(n*n, 0);
-    if (construirCuadrado(0, 0)) {
+    fil = vector(n, 0);
+    col = vector(n, 0);
+
+    if (construirCuadrado(0, 0, fil, col)) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 cout << m[i][j] << " ";

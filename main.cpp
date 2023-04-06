@@ -18,19 +18,6 @@ int sumaDiagonal1;
 int sumaDiagonal2;
 
 
-bool esDiagonal1(int i, int j){              //esta funcion y la de la otra diagonal por ahora no las estamos usando. no implementamos aun una poda con las diagoanales.
-    bool res;
-    if(i == j) res = true;
-    else res = false;
-    return res;
-}
-
-bool esDiagonal2(int i, int j){
-    bool res;
-    if(j == n - i - 1) res = true;
-    else res = false;
-    return res;
-}
 
 
 bool esMagico() {

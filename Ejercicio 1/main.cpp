@@ -87,10 +87,10 @@ int main(){
     cin >> n;
     cin >> k;
     numeroMagico = ((pow(n,3)+ n)/2);
-    m = vector(n, vector<int>(n, 0));
-    usados = vector(n*n, 0);
-    fil = vector(n, 0);
-    col = vector(n, 0);
+    m = vector<vector<int>>(n, vector<int>(n, 0));
+    usados = vector<int>(n*n, 0);
+    fil = vector<int>(n, 0);
+    col = vector<int>(n, 0);
 
     if (construirCuadrado(0, 0, fil, col)) {
         for (int i = 0; i < n; i++) {

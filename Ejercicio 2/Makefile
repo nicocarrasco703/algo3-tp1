@@ -1,15 +1,19 @@
 CC = g++
-CPPFLAGS = -g -std=c++11 -Wall -pedantic
+CPPFLAGS = -g -std=c++11 -Wall -O3
 OUTPUT_PATH := bin
-OUTPUT_FILENAME := app
 
 .PHONY: all clean
 
-all: app
+all: benchmark
+
+benchmark: app
+	@time $(OUTPUT_PATH)/app < tests/test1.txt
+	@time $(OUTPUT_PATH)/app < tests/test2.txt
+	@time $(OUTPUT_PATH)/app < tests/test3.txt
 
 app: main.cpp
 	@mkdir -p $(OUTPUT_PATH)
-	$(CC) $(CPPFLAGS) $< -o $(OUTPUT_PATH)/$(OUTPUT_FILENAME)
+	$(CC) $(CPPFLAGS) $< -o $(OUTPUT_PATH)/app
 
 clean:
 	rm -f *.o

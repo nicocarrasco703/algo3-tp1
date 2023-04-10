@@ -31,7 +31,6 @@ bool busqueda(int i, int acum){
 
 int main() {
     cin >> c; // cantidad de casos
-    resultados.resize(c, "");
     for(int j = 0; j < c; j++){
         cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = modulo
         v.resize(n); // redefinir vector con tamaño n

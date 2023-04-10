@@ -6,9 +6,10 @@
 using namespace std;
 
 // declaracion de variables globales
-int n; int m; int r;
+int n; int m; int r; int c;
 vector<int> v;
 map<pair<int, int>, int> dynamic_map;
+vector<string> resultados;
 // -------------------------------
 
 
@@ -29,17 +30,24 @@ bool busqueda(int i, int acum){
 }
 
 int main() {
-    cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = modulo
-    for (int i = 0; i < n; i++) { // inicializar vector
-        int x; cin >> x;
-        v.push_back(x);
+    cin >> c; // cantidad de casos
+    for(int j = 0; j < c; j++){
+        cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = modulo
+        v.resize(n); // redefinir vector con tamaño n
+        for (int i = 0; i < n; i++) { // inicializar vector
+            int x; 
+            cin >> x;
+            v[i] = x;
+        }
+        if (busqueda(0, 0)){
+            resultados.push_back("Si");
+        }
+        else{
+            resultados.push_back("No");
+        }
     }
-    bool res = busqueda(0, 0);
-    if (res){
-        cout << "Si" << endl;
-     }
-    else{
-        cout << "No" << endl;
+    for(int j = 0; j < c; j++){
+        cout << resultados[j] << endl; // imprimir los resultados
     }
     return 0;
 }

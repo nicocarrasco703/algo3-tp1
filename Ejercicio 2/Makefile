@@ -8,8 +8,6 @@ all: benchmark
 
 benchmark: app
 	@time $(OUTPUT_PATH)/app < tests/test1.txt
-	@time $(OUTPUT_PATH)/app < tests/test2.txt
-	@time $(OUTPUT_PATH)/app < tests/test3.txt
 
 app: main.cpp
 	@mkdir -p $(OUTPUT_PATH)

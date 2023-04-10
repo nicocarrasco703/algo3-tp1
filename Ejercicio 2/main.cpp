@@ -29,7 +29,7 @@ bool busqueda(int i, int acum){
 }
 
 int main() {
-    cin >> n >> m >> r; // n = tamaño del vector, m = modulo, r = resto
+    cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = modulo
     for (int i = 0; i < n; i++) { // inicializar vector
         int x; cin >> x;
         v.push_back(x);

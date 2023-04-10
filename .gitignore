@@ -40,3 +40,4 @@ Thumbs.db
 cmake-build-debug
 cmake-build-release
 build
+.vscode

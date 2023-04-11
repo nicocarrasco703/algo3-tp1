@@ -8,38 +8,44 @@ using namespace std;
 // declaracion de variables globales
 int n; int m; int r; int c;
 vector<int> v;
-map<pair<int, int>, int> dynamic_map;
 vector<string> resultados;
 // -------------------------------
 
 
-bool busqueda(int i, int acum){
+bool busqueda(int i, int acum, map<pair<int, int>, bool> &dynamic_map){
+    pair<int, int> clave = make_pair(i, acum);
+
+    if (dynamic_map.find(clave) != dynamic_map.end()) {
+        return dynamic_map[clave];
+    }
+
     if (i == n) {
-        return acum % m == r;
-    }
-    if (dynamic_map.find({i, acum}) != dynamic_map.end()) {
-        return dynamic_map[{i, acum}];
+        bool res = (acum % m) == r;
+        dynamic_map.emplace(clave, res);
+        return res;
     }
 
-    bool resta = busqueda(i + 1, acum - v[i]);
-    bool suma = busqueda(i + 1, acum + v[i]);
-    bool producto = busqueda(i + 1, acum * v[i]);
-    bool potencia = busqueda(i + 1, pow (acum, v[i]));
+    bool resta = busqueda(i + 1, acum - v[i], dynamic_map);
+    bool suma = busqueda(i + 1, acum + v[i], dynamic_map);
+    bool producto = busqueda(i + 1, acum * v[i], dynamic_map);
+    bool potencia = busqueda(i + 1, pow (acum, v[i]), dynamic_map);
 
-    return resta || suma || producto || potencia;
+    dynamic_map.emplace(clave, resta || suma || producto || potencia);
+    return dynamic_map[clave];
 }
 
 int main() {
     cin >> c; // cantidad de casos
     for(int j = 0; j < c; j++){
+        map<pair<int, int>, bool> dynamic_map;
         cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = modulo
         v.resize(n); // redefinir vector con tamaño n
         for (int i = 0; i < n; i++) { // inicializar vector
-            int x; 
+            int x;
             cin >> x;
             v[i] = x;
         }
-        if (busqueda(0, 0)){
+        if (busqueda(1, v[0], dynamic_map)){
             resultados.push_back("Si");
         }
         else{

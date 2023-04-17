@@ -2,58 +2,57 @@
 #include<vector>
 #include<algorithm>
 #include<tuple>
+#include<list>
 
 using namespace std;
 
-
-vector<pair<int,int>> a;
-int n;
+// ------- declaracion de variables globales -----------
+int n; // cantidad de actividades
+//------------------------------------------------------
 
 
 bool orden(tuple<int, int, int> t, tuple<int, int, int> h){
    return  get<1>(t) < get<1>(h);
 }
 
-vector<tuple<int, int, int>> paresAStructs(){
+vector<tuple<int, int, int>> paresATriplas(vector<pair<int, int> > &a){
     vector<tuple<int, int, int> > r;
-    for(unsigned long int i = 0; i < a.size(); i++){
-        tuple<int, int, int> t;
-        get<0>(t) = a[i].first;
-        get<1>(t) = a[i].second;
-        get<2>(t) = i;
+    for(int i = 0; i < a.size(); i++){
+        int si = a[i].first;
+        int ti = a[i].second;
+        tuple<int, int, int> t = make_tuple(si, ti, i);
         r.push_back(t);
     }
     return r;
 }
 
 
-void sortDeActividades(vector<tuple<int, int, int>>& p){
-    vector<vector<tuple<int, int, int>>> s((2*n) + 1);
-    for(int i = 0; i < (2*n) + 1; i++){
-        s[get<1>(p[i])].push_back(p[i]);
+void sortDeActividades(vector<tuple<int, int, int> >& p){ // bucket sort, ordena las actividades por tiempo de finalizacion
+    vector<list<tuple<int, int, int> > > s((2*n) + 1);
+    for(int i = 0; i < n; i++){
+        s[get<1>(p[i])].push_back(p[i]); // siendo p[i] = <si, ti, i>, lo guardo en la posicion ti del vector s
     }
     int k = 0;
     for(int i = 0; i < s.size(); i++){
-        if(s[i] > 0)
-            for(int j = 0; j < s[i].size(); j++){
-                p[k] = s[i][j];
-                k++;
-            }
+        while(!s[i].empty()){ 
+            p[k] = s[i].front();
+            s[i].pop_front();
+            k++;
         }
+    }
 }
 
 
 
-vector<tuple<int, int, int>> subconj(){
+vector<tuple<int, int, int>> subconj(vector<pair<int, int> > &a){
     vector<tuple<int, int, int>> res;
-    vector<tuple<int, int, int>> r;
-    r = paresAStructs();
-    sortDeActividades(r);
-    res.push_back(r[0]);
+    vector<tuple<int, int, int>> r = paresATriplas(a);
+    sortDeActividades(r); // ordenamos las actividades por tiempo de finalizacion
+    res.push_back(r[0]); // agrego la actividad que termina mas temprano
     for(int i = 1; i < n; i ++){
-        if(get<0>(r[i]) >= get<1>(res.back())) // Usar res.back() en lugar de res[i - 1]
+        if(get<0>(r[i]) >= get<1>(res.back())){ // si la actividad i comienza despues de que termine la actividad que esta en el vector res, la agrego
             res.push_back(r[i]);
-        else continue;
+        }
     }
     return res;
 }
@@ -61,15 +60,15 @@ vector<tuple<int, int, int>> subconj(){
 
 int main() {
     cin >> n;
+    vector<pair<int,int> > a(n);
     for(int i = 0; i < n; i++){
-        int x; cin >> x;
-        int y; cin >> y;
-        pair<int, int> c = make_pair(x, y);
-        a.push_back(c);
+        int si; cin >> si;
+        int ti; cin >> ti;
+        a[i] = make_pair(si, ti);
     }
-    vector<tuple<int, int, int> > h = subconj();
+    vector<tuple<int, int, int> > h = subconj(a);
     cout << h.size() << "\n";
-    for(unsigned long int i = 0; i < h.size(); i++){
+    for(int i = 0; i < h.size(); i++){
         cout << ((get<2>(h[i])) + 1) << " ";
     }
     return 0;

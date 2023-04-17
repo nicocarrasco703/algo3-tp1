@@ -11,10 +11,6 @@ int n; // cantidad de actividades
 //------------------------------------------------------
 
 
-bool orden(tuple<int, int, int> t, tuple<int, int, int> h){
-   return  get<1>(t) < get<1>(h);
-}
-
 vector<tuple<int, int, int>> paresATriplas(vector<pair<int, int> > &a){
     vector<tuple<int, int, int> > r;
     for(int i = 0; i < a.size(); i++){
@@ -25,7 +21,6 @@ vector<tuple<int, int, int>> paresATriplas(vector<pair<int, int> > &a){
     }
     return r;
 }
-
 
 void sortDeActividades(vector<tuple<int, int, int> >& p){ // bucket sort, ordena las actividades por tiempo de finalizacion
     vector<list<tuple<int, int, int> > > s((2*n) + 1);
@@ -42,8 +37,6 @@ void sortDeActividades(vector<tuple<int, int, int> >& p){ // bucket sort, ordena
     }
 }
 
-
-
 vector<tuple<int, int, int>> subconj(vector<pair<int, int> > &a){
     vector<tuple<int, int, int>> res;
     vector<tuple<int, int, int>> r = paresATriplas(a);
@@ -56,7 +49,6 @@ vector<tuple<int, int, int>> subconj(vector<pair<int, int> > &a){
     }
     return res;
 }
-
 
 int main() {
     cin >> n;

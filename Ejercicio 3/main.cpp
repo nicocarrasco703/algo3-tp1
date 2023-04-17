@@ -27,37 +27,37 @@ vector<tuple<int, int, int>> paresAStructs(){
 }
 
 
-/*void sortDeActividades(vector<tuple<int, int, int>> p){
-    vector<vector<tuple<int, int, int>>> s;
-    for(int i = 0; i < n; i ++){
+void sortDeActividades(vector<tuple<int, int, int>>& p){
+    vector<vector<tuple<int, int, int>>> s((2*n) + 1);
+    for(int i = 0; i < (2*n) + 1; i++){
         s[get<1>(p[i])].push_back(p[i]);
     }
     int k = 0;
     for(int i = 0; i < s.size(); i++){
-        for(int j = 0; j < s[i].size(); j++){
-            p[k] = s[i][j];
-            k++;
+        if(s[i] > 0)
+            for(int j = 0; j < s[i].size(); j++){
+                p[k] = s[i][j];
+                k++;
+            }
         }
-    }
-}*/
+}
 
 
-vector<tuple<int, int, int> > subconj(){
-    vector<tuple<int, int, int> > res;
-    vector<tuple<int, int, int> > r;
+
+vector<tuple<int, int, int>> subconj(){
+    vector<tuple<int, int, int>> res;
+    vector<tuple<int, int, int>> r;
     r = paresAStructs();
-    //sortDeActividades(r);
-    sort(r.begin(), r.end(), orden);
+    sortDeActividades(r);
     res.push_back(r[0]);
     for(int i = 1; i < n; i ++){
-        if(get<0>(r[i]) >= get<1>(res[res.size() - 1])) res.push_back(r[i]);
+        if(get<0>(r[i]) >= get<1>(res.back())) // Usar res.back() en lugar de res[i - 1]
+            res.push_back(r[i]);
         else continue;
     }
     return res;
 }
 
-//<0,3><1,4><3,6><6,7><4,10>
-//  3    2    5    1    4
 
 int main() {
     cin >> n;

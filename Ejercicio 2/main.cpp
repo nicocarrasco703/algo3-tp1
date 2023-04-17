@@ -38,12 +38,12 @@ bool busqueda(int i, unsigned long int acum, map<pair<int, int>, bool> &dynamic_
         return res;
     }
 
-    unsigned long int restoNeg = ((acum -v[i] % m) + m) % m;
-    // recursion
-    // guardo el resultado en el diccionario y devuelvo el resultado
+    unsigned long int restoNeg = (((acum - v[i] )% m) + m) % m;
+    
+    // hacemos la recursion y guardamos en el diccionario si alguna de ellas da true
     dynamic_map.emplace(clave, busqueda(i + 1, restoNeg, dynamic_map) ||
      busqueda(i + 1, acum + v[i], dynamic_map) ||
-      busqueda(i + 1, acum * v[i], dynamic_map) || 
+      busqueda(i + 1, (acum * v[i]) % m, dynamic_map) || 
       busqueda(i + 1, power(acum, v[i]), dynamic_map));
 
     return dynamic_map[clave];

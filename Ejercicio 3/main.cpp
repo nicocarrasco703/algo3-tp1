@@ -22,7 +22,7 @@ vector<tuple<int, int, int>> paresATriplas(vector<pair<int, int> > &a){
     return r;
 }
 
-void sortDeActividades(vector<tuple<int, int, int> >& p){ // bucket sort, ordena las actividades por tiempo de finalizacion
+void ordenarTriplas(vector<tuple<int, int, int> >& p){ // bucket sort, ordena las actividades por tiempo de finalizacion
     vector<list<tuple<int, int, int> > > s((2*n) + 1);
     for(int i = 0; i < n; i++){
         s[get<1>(p[i])].push_back(p[i]); // siendo p[i] = <si, ti, i>, lo guardo en la posicion ti del vector s

@@ -1,18 +1,15 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
-// declaracion de variables globales ((a % b) +b )%b
-int n; int m; unsigned long int r; int c;
+int n, m, r;
 vector<int> v;
-vector<string> resultados;
-// -------------------------------
+unordered_map<int, bool> dp; // Tabla de programación dinámica
 
-unsigned long int power(int x, unsigned int y){
-     unsigned long int temp;
+int power(int x, int y) {
+    unsigned long int temp;
      if( y == 0)
        return 1;
      if(y ==1)
@@ -22,53 +19,49 @@ unsigned long int power(int x, unsigned int y){
        return (temp*temp) % m;
      else
        return (x*temp*temp) % m;
-  }
+}
 
+bool busqueda(int i, int acum) {
+    int key = i * 10000 + acum; // Crear una clave única basada en 'i' y 'acum'
 
-bool busqueda(int i, unsigned long int acum, map<pair<int, int>, bool> &dynamic_map){
-    pair<int, int> clave = make_pair(i, acum); // creo la clave de antemano para no tener que hacerlo en cada llamada recursiva
-
-    if (dynamic_map.find(clave) != dynamic_map.end()) { // si ya esta definido el valor de la clave, lo devuelvo
-        return dynamic_map[clave];
+    // Si el valor ya se encuentra en la tabla de programación dinámica, lo devolvemos
+    if (dp.find(key) != dp.end()) {
+        return dp[key];
     }
 
-    if (i == n) { // si llegue al final del vector guardo el valor en el diccionario y devuelvo el resultado
+    if (i == n) { // Si llegamos al final del vector
+        // Comprobamos si el acumulador es igual al resto deseado
         bool res = (acum % m) == r;
-        dynamic_map.emplace(clave, res);
+        dp[key] = res; // Guardamos el resultado en la tabla de programación dinámica
         return res;
     }
 
-    unsigned long int restoNeg = (((acum - v[i] )% m) + m) % m;
-    
-    // hacemos la recursion y guardamos en el diccionario si alguna de ellas da true
-    dynamic_map.emplace(clave, busqueda(i + 1, restoNeg, dynamic_map) ||
-     busqueda(i + 1, acum + v[i], dynamic_map) ||
-      busqueda(i + 1, (acum * v[i]) % m, dynamic_map) || 
-      busqueda(i + 1, power(acum, v[i]), dynamic_map));
-
-    return dynamic_map[clave];
+    // Hacemos las llamadas recursivas y actualizamos el valor de la tabla de programación dinámica
+    bool res = busqueda(i + 1, (acum + v[i]) % m) ||
+               busqueda(i + 1, (acum * v[i]) % m) ||
+               busqueda(i + 1, (acum - v[i] + m) % m) || // Agregamos la recursión con la resta
+               busqueda(i + 1, power(acum, v[i]));
+    dp[key] = res; // Guardamos el resultado en la tabla de programación dinámica
+    return res;
 }
 
 int main() {
-    cin >> c; // cantidad de casos
-    for(int j = 0; j < c; j++){
-        map<pair<int, int>, bool> dynamic_map;
-        cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = modulo
-        v.resize(n); // redefinir vector con tamaño n
-        for (int i = 0; i < n; i++) { // inicializar vector
+    int c;
+    cin >> c; // Cantidad de casos
+    while (c--) {
+        cin >> n >> r >> m; // n = tamaño del vector, r = resto, m = módulo
+        v.resize(n); // Redefinimos el vector con tamaño n
+        for (int i = 0; i < n; i++) { // Inicializamos el vector
             int x;
             cin >> x;
             v[i] = x;
         }
-        if (busqueda(1, v[0], dynamic_map)){
-            resultados.push_back("Si");
+        dp.clear(); // Limpiamos la tabla de programación dinámica
+        if (busqueda(0, 0)) {
+            cout << "Si" << endl;
+        } else {
+            cout << "No" << endl;
         }
-        else{
-            resultados.push_back("No");
-        }
-    }
-    for(int j = 0; j < c; j++){
-        cout << resultados[j] << endl; // imprimir los resultados
     }
     return 0;
 }

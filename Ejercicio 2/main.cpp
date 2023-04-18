@@ -36,10 +36,11 @@ bool busqueda(int i, int acum) {
         return res;
     }
 
+    long long int multi = (acum * v[i]) % m;
     // Hacemos las llamadas recursivas y actualizamos el valor de la tabla de programación dinámica
     bool res = busqueda(i + 1, (acum + v[i]) % m) ||
-               busqueda(i + 1, (acum * v[i]) % m) ||
-               busqueda(i + 1, (acum - v[i] + m) % m) || // Agregamos la recursión con la resta
+               busqueda(i + 1, multi) ||
+               busqueda(i + 1, ((acum - v[i]) + m) % m) || // Agregamos la recursión con la resta
                busqueda(i + 1, power(acum, v[i]));
     dp[key] = res; // Guardamos el resultado en la tabla de programación dinámica
     return res;

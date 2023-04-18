@@ -40,7 +40,7 @@ void ordenarTriplas(vector<tuple<int, int, int> >& p){ // bucket sort, ordena la
 vector<tuple<int, int, int>> subconj(vector<pair<int, int> > &a){
     vector<tuple<int, int, int>> res;
     vector<tuple<int, int, int>> r = paresATriplas(a);
-    sortDeActividades(r); // ordenamos las actividades por tiempo de finalizacion
+    ordenarTriplas(r); // ordenamos las actividades por tiempo de finalizacion
     res.push_back(r[0]); // agrego la actividad que termina mas temprano
     for(int i = 1; i < n; i ++){
         if(get<0>(r[i]) >= get<1>(res.back())){ // si la actividad i comienza despues de que termine la actividad que esta en el vector res, la agrego

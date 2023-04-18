@@ -14,7 +14,7 @@ vector<int> col;
 int sumaDiagonal1;
 int sumaDiagonal2;
 
-bool esMagico() {
+bool esMagico() {                       //chequeamos como ultimo recurso si al finalizar las diagonales estas son correctas
     sumaDiagonal1 = sumaDiagonal2 = 0;
     for (int i = 0; i < n; i++) {
         sumaDiagonal1 += m[i][i];
@@ -25,6 +25,7 @@ bool esMagico() {
     }
     return true;
 }
+
 
 bool esDiagonal1(int i, int j){
     return i == j;
@@ -37,28 +38,28 @@ bool construirCuadrado(int i, int j, vector<int> &sumFil, vector<int> &sumCol){
     if(i == n) {
         if(esMagico()){
             cont++;
-            if(cont == k) return true;
+            if(cont == k) return true;          //devolvemos el k-esimo cuadrado magico
         }
     } else {
         if(m[i][j] == 0){
             for(int x = 1; x <= n*n; x++){
-                if(usados[x] == 0){
+                if(usados[x] == 0){             //chequeamos si ya habiamos usado x en el cuadrado.
                     m[i][j] = x;
-                    usados[x] = 1;
+                    usados[x] = 1;              //marcamos x como usado
                     sumFil[i] += x;
                     sumCol[j] += x;
-                    bool cheq_diag1 = esDiagonal1(i,j);
+                    bool cheq_diag1 = esDiagonal1(i,j);     //nos fijamos si estamos en alguna de las diagonales
                     bool cheq_diag2 = esDiagonal2(i,j);
                     if(cheq_diag1) sumaDiagonal1 += x;
                     if(cheq_diag2) sumaDiagonal2 += x;
-                    bool diag_ok = sumaDiagonal1 <= numeroMagico && sumaDiagonal2 <= numeroMagico;
-                    if(!(i == n - 1 && sumCol[j] != numeroMagico))
+                    bool diag_ok = sumaDiagonal1 <= numeroMagico && sumaDiagonal2 <= numeroMagico; //chequeamos q la suma parcial de las diagonales sea valida
+                    if(!(i == n - 1 && sumCol[j] != numeroMagico))                                  //nos fijamos si estamos o no en la ultima fila. si estamos, necesitamos que las sumas de las columnas sean iguales al numero magico.
                     {if(j + 1 < n){
-                        if(sumFil[i] < numeroMagico && diag_ok && sumCol[j] <= numeroMagico && construirCuadrado(i, j + 1, sumFil, sumCol)) return true;
+                        if(sumFil[i] < numeroMagico && diag_ok && sumCol[j] <= numeroMagico && construirCuadrado(i, j + 1, sumFil, sumCol)) return true;  //chequeamos si las sumas parciales son validas y hacemos la recursion.
                     } else {
                         if(sumFil[i] == numeroMagico && diag_ok && sumCol[j] <= numeroMagico && construirCuadrado(i + 1, 0, sumFil, sumCol)) return true;
                     }}
-                    m[i][j] = 0;
+                    m[i][j] = 0;                //backtrack: sacamos el elemento q pusimos, lo marcamos como no usado y lo restamos de las sumas parciales.
                     sumFil[i] -= x;
                     sumCol[j] -= x;
                     usados[x] = 0;

@@ -62,7 +62,7 @@ int main() {
             cin >> x;
             v[i] = x;
         }
-        if (busqueda(0, 0)) {
+        if (busqueda(1, v[0])) {
             cout << "Si" << endl;
         } else {
             cout << "No" << endl;

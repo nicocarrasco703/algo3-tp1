@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 
 using namespace std;
 
@@ -8,8 +7,8 @@ int n, m, r;
 vector<int> v;
 vector<vector<int> > dp;
 
-int power(int x, int y) {
-    unsigned long int temp;
+long long int power(long long int x, long long int y) {
+    long long int temp;
      if( y == 0)
        return 1;
      if(y ==1)
@@ -21,23 +20,32 @@ int power(int x, int y) {
        return (x*temp*temp) % m;
 }
 
-bool busqueda(int i, int acum) {
+bool busqueda(int i, long long int acum) {
+    if (i == n) { // Si llegamos al final del vector
+        // Comprobamos si el acumulador es igual al resto deseado
+        bool res = acum == r;
+        //dp[i][acum] = res;
+        return res;
+    }
+    
     if (dp[i][acum] != -1) { // Si ya hemos calculado el resultado
         return dp[i][acum];
     }
 
-    if (i == n ) { // Si llegamos al final del vector
-        // Comprobamos si el acumulador es igual al resto deseado
-        bool res = (acum % m) == r;
-        dp[i][acum] = res;
-        return res;
-    }
-    long long int multi = (acum * v[i]) % m;
-    bool res = busqueda(i + 1, (acum + v[i]) % m) ||
+
+    long long int modResta = ((acum - v[i]) + m) % m;
+
+    long long int multi = (acum * (v[i] % m)) % m;
+
+    long long int sumaResto = (acum + v[i]) % m;
+
+    bool res = (busqueda(i + 1, sumaResto) ||
                busqueda(i + 1, multi) ||
-               busqueda(i + 1, ((acum - v[i]) + m) % m) || // Agregamos la recursión con la resta
-               busqueda(i + 1, power(acum, v[i]));
+               busqueda(i + 1, modResta) ||
+               busqueda(i + 1, power(acum, v[i])));
+
     dp[i][acum] = res;
+
     return res;
 }
 
@@ -62,3 +70,4 @@ int main() {
     }
     return 0;
 }
+

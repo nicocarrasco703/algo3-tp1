@@ -13,7 +13,7 @@ vector<int> desc;            //momento en el que descubri cada nodo (si es -1 no
 vector<int> low;             //minimo nivel al que puedo llegar a traves de backedges
 int tiempo = 0;
 vector<bool> visitados;
-map<pair<int,int>, bool> puentes;
+vector<pair<int,int>> puentes; //guarda las aristas puente
 
 
 
@@ -29,39 +29,36 @@ void guardarPuentes(int u, int p){     //quiero guardar en un vector todas las a
             guardarPuentes(v,u);
             low[u] = min(low[u],low[v]);
             if(low[v] > desc[u]){
-            puentes[{u,v}] = true;
+            puentes.push_back({u,v});
             }
         }
         else low[u] = min(low[u],desc[v]);
     }
 }
 
-/* void eliminarPuentes(){
-    for (auto it = puentes.begin(); it != puentes.end(); ++it){
-        int u = it->first.first;
-        int v = it->first.second;
-        grafo[u].erase(grafo[u].begin() + v);
-        grafo[v].erase(grafo[v].begin() + u);
-    }
-}
 
-bool esPuente(int u, int v){
-    return puentes[{u,v}] || puentes[{v,u}];
-}
-
-
-
-void eliminarPuentes(){
-    for(int u = 0; u <  grafo.size(); u++){
-        for(int v : grafo[u]){
-            if(esPuente(u,v)){
-                grafo[u].erase(grafo[u].begin() + v);
-                grafo[v].erase(grafo[v].begin() + u);
-            }
+void borrar(int u,int v){
+    for(int i = 0; i < grafo[u].size(); i++){
+        if(grafo[u][i] == v){
+            grafo[u].erase(grafo[u].begin() + i);
+            break;
         }
     }
-} 
-*/
+    for(int j = 0; j < grafo[v].size(); j++){
+        if(grafo[v][j] == u){
+            grafo[v].erase(grafo[v].begin() + j);
+            break;
+        }
+    }
+}
+
+void eliminarPuentes(){
+    for(int i = 0; i < puentes.size(); i++){
+        int u = puentes[i].first;
+        int v = puentes[i].second;
+        borrar(u,v);
+    }
+}
 
 
 int main(){
@@ -77,11 +74,7 @@ int main(){
         grafo[v].push_back(u);
     }
     guardarPuentes(1,-1);
-    //imprimo puentes
-    for (auto it = puentes.begin(); it != puentes.end(); ++it){
-        cout << it->first.first << " " << it->first.second << endl;
-    }
-    //eliminarPuentes();
+    eliminarPuentes();
     //cout << setprecision(5) << prob << '\n';
     return 0;
 }

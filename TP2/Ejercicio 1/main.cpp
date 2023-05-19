@@ -18,6 +18,7 @@ vector<bool> visitados;
 map<pair<int,int>, bool> puentes;
 
 
+
 void guardarPuentes(int u, int p){     //quiero guardar en un vector todas las aristas puente para luego eliminarlas
     visitados[u] = true;
     tiempo++;
@@ -43,25 +44,19 @@ bool esPuente(int u, int v){
 }
 
 
-/* void dfs(int v){
-    visitados[v] = true;
-    for(int u : grafo[v]){
-        if(!visitados[u] && !esPuente(v,u));
-            dfs(u);
-    }
-} */
-
 
 void eliminarPuentes(){
     for(int u = 0; u <  grafo.size(); u++){
         for(int v : grafo[u]){
             if(esPuente(u,v)){
-                grafo[u].erase(v);
-                grafo[v].erase(u);
+                grafo[u].erase(grafo[u].begin() + v);
+                grafo[v].erase(grafo[v].begin() + u);
             }
         }
     }
 }
+
+
 
 int main(){
     cin >> n >> m;

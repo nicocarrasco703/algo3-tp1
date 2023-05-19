@@ -8,14 +8,14 @@ typedef long long ll;
 
 vector<vector<int>> grafo;      // Lista de adyacencia.
 ll n; ll m;
-ll prob;
+double prob;
 vector<int> desc;            //momento en el que descubri cada nodo (si es -1 no lo descubri)
 vector<int> low;             //minimo nivel al que puedo llegar a traves de backedges
 int tiempo = 0;
 vector<bool> visitados;
 vector<pair<int,int>> puentes; //guarda las aristas puente
-
-
+vector<int> componentes;       //guarda los nodos de cada componente
+int cont;
 
 void guardarPuentes(int u, int p){     //quiero guardar en un vector todas las aristas puente para luego eliminarlas
     visitados[u] = true;
@@ -61,8 +61,38 @@ void eliminarPuentes(){
 }
 
 
+void dfs(int u, int p = -1){
+    visitados[u] = true;
+    for(int i = 0; i < grafo[u].size(); i++){
+        int v = grafo[u][i];
+        if(v == p) continue;
+        if(!visitados[v]){
+            dfs(v,u);
+            cont++;
+        }
+    }
+}
+
+
+void guardarComponentes(){
+    for(int i = 1; i <= n; i++){
+        if(!visitados[i]){
+            cont = 1;
+            dfs(i);
+            componentes.push_back(cont);
+        }
+    }
+}
+
+
+double sumaGauss(int n){
+    return (n*(n+1))/2;
+}
+
+
 int main(){
     cin >> n >> m;
+    double formasDeJugar = sumaGauss(n -1);
     grafo = vector<vector<int>>(n+1);
     desc = vector<int>(n+1,-1);
     low = vector<int>(n+1,-1);
@@ -73,8 +103,19 @@ int main(){
         grafo[u].push_back(v);
         grafo[v].push_back(u);
     }
-    guardarPuentes(1,-1);
+    for(int i = 1; i < visitados.size(); i++){
+        if(!visitados[i]){
+            guardarPuentes(i,-1);
+        }
+    }
     eliminarPuentes();
-    //cout << setprecision(5) << prob << '\n';
+    visitados = vector<bool>(n + 1,false);
+    guardarComponentes();
+    while(!componentes.empty()){
+        int c = componentes.back();
+        prob += sumaGauss(c - 1)/formasDeJugar;
+        componentes.pop_back();
+    }
+    cout << setprecision(5) << fixed << 1 - prob << '\n';
     return 0;
 }

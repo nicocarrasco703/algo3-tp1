@@ -66,17 +66,17 @@ void eliminarPuentes(){
 
 int main(){
     cin >> n >> m;
-    grafo = vector<vector<int>>(n);
-    desc = vector<int>(n,-1);
-    low = vector<int>(n,-1);
-    visitados = vector<bool>(n,false);
-    for(int i = 0; i < m; i++){ // Inicializo las lista de adyacencia
+    grafo = vector<vector<int>>(n+1);
+    desc = vector<int>(n+1,-1);
+    low = vector<int>(n+1,-1);
+    visitados = vector<bool>(n+1,false);
+    while (m--){ // Inicializo las lista de adyacencia
         int u,v;
         cin >> u >> v;
         grafo[u].push_back(v);
         grafo[v].push_back(u);
     }
-    guardarPuentes(0,-1);
+    guardarPuentes(1,-1);
     //imprimo puentes
     for (auto it = puentes.begin(); it != puentes.end(); ++it){
         cout << it->first.first << " " << it->first.second << endl;

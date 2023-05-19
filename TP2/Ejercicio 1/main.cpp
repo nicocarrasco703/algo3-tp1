@@ -8,7 +8,7 @@ typedef long long ll;
 
 vector<vector<int>> grafo;      // Lista de adyacencia.
 ll n; ll m;
-double prob;
+ll prob;
 vector<int> desc;            //momento en el que descubri cada nodo (si es -1 no lo descubri)
 vector<int> low;             //minimo nivel al que puedo llegar a traves de backedges
 int tiempo = 0;
@@ -85,7 +85,7 @@ void guardarComponentes(){
 }
 
 
-double sumaGauss(int n){
+double sumaGauss(ll n){
     return (n*(n+1))/2;
 }
 
@@ -93,7 +93,7 @@ double sumaGauss(int n){
 int main(){
     cin >> n >> m;
     double formasDeJugar = sumaGauss(n -1);
-    grafo = vector<vector<int>>(n+1);
+    grafo.assign(n + 1, vector<int>(0));
     desc = vector<int>(n+1,-1);
     low = vector<int>(n+1,-1);
     visitados = vector<bool>(n+1,false);
@@ -112,10 +112,10 @@ int main(){
     visitados = vector<bool>(n + 1,false);
     guardarComponentes();
     while(!componentes.empty()){
-        int c = componentes.back();
-        prob += sumaGauss(c - 1)/formasDeJugar;
+        ll c = componentes.back();
+        prob += sumaGauss(c - 1);
         componentes.pop_back();
     }
-    cout << setprecision(5) << fixed << 1 - prob << '\n';
+    cout << setprecision(5) << fixed << 1.0 - (double(prob)/formasDeJugar) << '\n';
     return 0;
 }

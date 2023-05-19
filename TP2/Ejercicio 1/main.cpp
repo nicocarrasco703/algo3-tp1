@@ -66,10 +66,10 @@ void eliminarPuentes(){
 
 int main(){
     cin >> n >> m;
-    grafo.resize(n);
-    desc.resize(n,-1);
-    low.resize(n,-1);
-    visitados.resize(n,false);
+    grafo = vector<vector<int>>(n);
+    desc = vector<int>(n,-1);
+    low = vector<int>(n,-1);
+    visitados = vector<bool>(n,false);
     for(int i = 0; i < m; i++){ // Inicializo las lista de adyacencia
         int u,v;
         cin >> u >> v;

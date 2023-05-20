@@ -11,6 +11,7 @@ main: app
 # target para correr con valgrind
 valgrind: app
 	@valgrind --leak-check=full $(OUTPUT_PATH)/app < tests/test1.txt
+	@valgrind --leak-check=full $(OUTPUT_PATH)/app < tests/test2.txt
 
 # target para correr con gdb
 gdb: app
@@ -23,7 +24,8 @@ lldb: app
 # target para correr los tests
 tests: app
 	@time $(OUTPUT_PATH)/app < tests/test1.txt
-
+	@time $(OUTPUT_PATH)/app < tests/test2.txt
+	
 # compilacion
 app: main.cpp									
 	@mkdir -p $(OUTPUT_PATH)

@@ -31,7 +31,7 @@ void dfs2(int v) {
 void condensar(){
     vector<int> raices(n+1, 0);
     vector<int> vertices_raiz;
-    vector<vector<int>> grafo_condensado(n+1);
+    //vector<vector<int>> grafo_condensado(n+1);
 
     for(auto v : pila){
         if (!visitados[v]) {
@@ -48,8 +48,8 @@ void condensar(){
         }
     }
     // armar grafo condensado
-    for (int v = 0; v < n; v++)
-        for (auto u : grafo[v]) {
+    for (int v = 1; v <= n; v++)
+        for (int u : grafo[v]) {
             int raiz_v = raices[v];
             int raiz_u = raices[u];
             if (raiz_v != raiz_u){
@@ -76,6 +76,7 @@ int main() {
     int a, b;
     grafo.assign(n + 1, vector<int>());
     grafo_rev.assign(n + 1, vector<int>());
+    grafo_condensado.assign(n + 1, vector<int>());
     // inicializar grafo
     while(m--) {
         cin >> a >> b;

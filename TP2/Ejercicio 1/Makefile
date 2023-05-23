@@ -5,10 +5,13 @@ OUTPUT_PATH := bin
 .PHONY: all valgrind gdb lldb clean
 
 # target por defecto
-main: app
+all: clean app
+
+# target para correr
+run: app
 	./$(OUTPUT_PATH)/app
 
-# target para correr con valgrind
+# target para correr los tests con valgrind
 valgrind: app
 	@valgrind --leak-check=full $(OUTPUT_PATH)/app < tests/test1.txt
 	@valgrind --leak-check=full $(OUTPUT_PATH)/app < tests/test2.txt
@@ -17,7 +20,7 @@ valgrind: app
 gdb: app
 	@gdb $(OUTPUT_PATH)/app
 
-# target para correr con lldb (para macOS)
+# target para correr con lldb
 lldb: app
 	@lldb $(OUTPUT_PATH)/app
 

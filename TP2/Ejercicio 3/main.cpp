@@ -11,7 +11,8 @@ double costoUTP, costoFibra;
 const char UTP = 'U';
 const char Fibra = 'F';
 int caso = 0;
-vector<vector<int>> kruskalgrafo;
+//vector<vector<int>> kruskalgrafo;
+
 
 struct arista{
     double costo;
@@ -22,6 +23,8 @@ struct arista{
 bool orden(arista a, arista b){
     return a.costo < b.costo;
 }
+
+vector<arista> agm;
 
 struct DSU{
 
@@ -55,14 +58,26 @@ void kruskal(vector<arista> &grafo){
         int y = k.y;
         if(dsu.find(x) != dsu.find(y)){
             dsu.unite(x,y);
-            (k.tipo == UTP) ? costoUTP += k.costo : costoFibra += k.costo;
-            kruskalgrafo[x].push_back(y);
-            componentes--;
-            if (componentes == w){
-                break;
+            agm.push_back(k);
+            //kruskalgrafo[x].push_back(y);
             }
         }
     }
+
+void calcularCostos(){
+    costoUTP = 0;
+    costoFibra = 0;
+    for(int h = w - 1; h > 0; h--){
+        agm.pop_back();
+    }
+    for(auto k : agm){
+        if(k.tipo == UTP){
+            costoUTP += k.costo;
+        } else {
+            costoFibra += k.costo;
+        }
+    }
+    agm.clear();
 }
 
 double distancia(int x1, int y1, int x2, int y2){
@@ -87,7 +102,7 @@ vector<arista> init_grafo(vector<tuple<int, int>> &p){
                 costo = v * d;
                 tipo = Fibra;
             }
-            arista cable = {costo, x1, y1, tipo};
+            arista cable = {costo, i, j, tipo};
             aristas.push_back(cable);
         }
     }
@@ -108,7 +123,7 @@ int main() {
         costoUTP = 0;
         costoFibra = 0;
         cin >> n >> r >> w >> u >> v;
-        kruskalgrafo = vector<vector<int>>(n);
+        //kruskalgrafo = vector<vector<int>>(n);
         componentes = n;
         localizacion.clear();
         for(int i = 0; i < n; i++){
@@ -118,6 +133,7 @@ int main() {
         }
         grafo = init_grafo(localizacion);
         kruskal(grafo);
+        calcularCostos();
         imprimirCaso();
     }
 

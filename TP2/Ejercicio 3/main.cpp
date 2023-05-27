@@ -11,8 +11,6 @@ double costoUTP, costoFibra;
 const char UTP = 'U';
 const char Fibra = 'F';
 int caso = 0;
-//vector<vector<int>> kruskalgrafo;
-
 
 struct arista{
     double costo;
@@ -59,14 +57,11 @@ void kruskal(vector<arista> &grafo){
         if(dsu.find(x) != dsu.find(y)){
             dsu.unite(x,y);
             agm.push_back(k);
-            //kruskalgrafo[x].push_back(y);
             }
         }
     }
 
 void calcularCostos(){
-    costoUTP = 0;
-    costoFibra = 0;
     for(int h = w - 1; h > 0; h--){
         agm.pop_back();
     }
@@ -123,7 +118,6 @@ int main() {
         costoUTP = 0;
         costoFibra = 0;
         cin >> n >> r >> w >> u >> v;
-        //kruskalgrafo = vector<vector<int>>(n);
         componentes = n;
         localizacion.clear();
         for(int i = 0; i < n; i++){

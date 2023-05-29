@@ -1,12 +1,9 @@
-// Modems
 #include <bits/stdc++.h>
 
 using namespace std;
-typedef long long ll;
 
 vector<tuple<int, int>> localizacion;
 int n, r, w, u, v;
-int componentes;
 double costoUTP, costoFibra; 
 const char UTP = 'U';
 const char Fibra = 'F';
@@ -118,7 +115,6 @@ int main() {
         costoUTP = 0;
         costoFibra = 0;
         cin >> n >> r >> w >> u >> v;
-        componentes = n;
         localizacion.clear();
         for(int i = 0; i < n; i++){
             int x, y;

@@ -6,7 +6,6 @@ typedef long long ll;
 const ll inf = 1e18;
 
 int n, m, s, t, k;
-vector<ll> salida;
 
 
 struct arista{
@@ -53,12 +52,10 @@ void seleccionarCandidata(vector<vector<arista>>& g, vector<vector<arista>>& g_i
             min = nuevoMin;
         }
     }
-    salida.push_back(min);
-}
-
-void imprimirSalida(){
-    for(ll x : salida){
-        cout << x << endl;
+    if(min == inf){
+        cout << -1 << endl;
+    }else{
+        cout << min << endl;
     }
 }
 
@@ -83,8 +80,9 @@ int main() {
             ll c;
             cin >> x >> y >> c;
             arista a = {c, x, y};
+            arista a_inversa = {c, y, x};
             grafo[x].push_back(a);
-            grafo_inverso[y].push_back(a);
+            grafo_inverso[y].push_back(a_inversa);
         }
         // inicializar calles candidatas
         for (int i = 0; i < k; i++)
@@ -96,10 +94,9 @@ int main() {
             candidatas.push_back(a);
         }
         // resolver
+
         seleccionarCandidata(grafo, grafo_inverso, candidatas);
     }
-
-    imprimirSalida();
 
     return 0;
 } 

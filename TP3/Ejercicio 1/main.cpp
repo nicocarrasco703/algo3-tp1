@@ -12,14 +12,14 @@ struct arista{
     ll costo;
     int from, to;
     
-    bool operator<(const arista& otro) const {
-        return costo < otro.costo;
+    bool operator>(const arista& otro) const {
+        return costo > otro.costo;
     }
 };
 
 vector<ll> dijkstra(vector<vector<arista>> &grafo, int& src){
     //
-    priority_queue<arista, vector<arista>, less<arista>> pq;
+    priority_queue<arista, vector<arista>, greater<arista>> pq;
     vector<ll> dist(n+1, inf);
 
     pq.push({0, -1, src});

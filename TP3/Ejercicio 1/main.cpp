@@ -24,10 +24,12 @@ vector<ll> dijkstra(vector<vector<arista>> &grafo, int& src){
 
     pq.push({0, -1, src});
     dist[src] = 0;
-
+    vector<bool> visitado(n+1, false);
     while (!pq.empty()) {
         int u = pq.top().to;
         pq.pop();
+        if (visitado[u]) continue;
+        visitado[u] = true;
         for (arista i : grafo[u]) {
             int v = i.to;
             ll peso = i.costo;

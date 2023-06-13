@@ -45,19 +45,20 @@ vector<ll> dijkstra(vector<vector<arista>> &grafo, int& src){
 void seleccionarCandidata(vector<vector<arista>>& g, vector<vector<arista>>& g_inverso, vector<arista>& cand){
     vector<ll> distS = dijkstra(g, s);
     vector<ll> distT = dijkstra(g_inverso, t);
-    ll min = distS[t];
+    ll minimo = distS[t];
     for(arista c : cand){
         int u = c.from;
         int v = c.to;
         ll nuevoMin = distS[u] + c.costo + distT[v];
-        if (nuevoMin < min){
-            min = nuevoMin;
+        ll nuevoMin2 = distS[v] + c.costo + distT[u];
+        if(nuevoMin < minimo || nuevoMin2 < minimo){
+            minimo = min(nuevoMin, nuevoMin2);
         }
     }
-    if(min == inf){
+    if(minimo == inf){
         cout << -1 << endl;
     }else{
-        cout << min << endl;
+        cout << minimo << endl;
     }
 }
 

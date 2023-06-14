@@ -7,15 +7,15 @@ int n, m;
 vector<vector<int>> capacidad;
 vector<vector<int>> adj;
 
-int bfs(int s, int t, vector<int>& pred) {
+int dfs(int s, int t, vector<int>& pred) {
     fill(pred.begin(), pred.end(), -1);
     pred[s] = -2;
-    queue<pair<int, int>> q;
+    stack<pair<int, int>> q;
     q.push(make_pair(s, inf));
 
     while (!q.empty()) {
-        int act = q.front().first;
-        int flujo = q.front().second;
+        int act = q.top().first;
+        int flujo = q.top().second;
         q.pop();
 
         for (int sig : adj[act]) {
@@ -34,7 +34,7 @@ int bfs(int s, int t, vector<int>& pred) {
 
 int maxflujo(int s, int t) {
     int flujo = 0;
-    vector<int> pred(n);
+    vector<int> pred(n + 2);
     int nuevo_flujo;
 
     while (nuevo_flujo = bfs(s, t, pred)) {
@@ -55,17 +55,19 @@ void escanear(){
     if(n == 0 & m == 0){
         return;
     }
-    capacidad.assign(n+2, vector<int>(n+2, 0));
-    adj.assign(n+2, vector<int>());
+    //capacidad.assign(n+2, vector<int>(n+2, 0));
+    //adj.assign(n+2, vector<int>());
+    capacidad = vector<vector<int>> (n+2, vector<int>(n+2, -1));
+    adj = vector<vector<int>> (n+2, vector<int>());
     for (int i = 1; i < n + 1; i++){
         int x;
         cin >> x;
-        if(x == 0){
+        if(x == 1){
             adj[0].push_back(i);
             capacidad[0][i] = 1;
         } else {
-            adj[n + 1].push_back(i);
-            capacidad[n + 1][i] = 1;
+            adj[i].push_back(n+1);
+            capacidad[i][n+1] = 1;
         }
     }
     for (int i = 0; i < m; i++){

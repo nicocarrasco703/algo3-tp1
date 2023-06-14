@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-const ll inf = 1e18;
+const int inf = INT_MAX;
 
-int n;
+int n, m;
 vector<vector<int>> capacidad;
 vector<vector<int>> adj;
 vector<int> elecciones;
@@ -12,7 +12,7 @@ int bfs(int s, int t, vector<int>& pred) {
     fill(pred.begin(), pred.end(), -1);
     pred[s] = -2;
     queue<pair<int, int>> q;
-    q.push({s, inf});
+    q.push(make_pair(s, inf));
 
     while (!q.empty()) {
         int act = q.front().first;
@@ -25,7 +25,7 @@ int bfs(int s, int t, vector<int>& pred) {
                 int nuevo_flujo = min(flujo, capacidad[act][sig]);
                 if (sig == t)
                     return nuevo_flujo;
-                q.push({sig, nuevo_flujo});
+                q.push(make_pair(sig, nuevo_flujo));
             }
         }
     }
@@ -56,7 +56,7 @@ int maxflujo(int s, int t) {
 
 int main() {
     // IO rapido
-    sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     int cantCasos;
     cin >> cantCasos;

@@ -6,7 +6,6 @@ const int inf = INT_MAX;
 int n, m;
 vector<vector<int>> capacidad;
 vector<vector<int>> adj;
-vector<int> elecciones;
 
 int bfs(int s, int t, vector<int>& pred) {
     fill(pred.begin(), pred.end(), -1);
@@ -48,7 +47,6 @@ int maxflujo(int s, int t) {
             act = prev;
         }
     }
-
     return flujo;
 }
 
@@ -62,13 +60,18 @@ int main() {
     cin >> cantCasos;
     while (cantCasos--){
         cin >> n >> m;
-        capacidad.assign(n+1, vector<int>(n+1, 0));
-        adj.assign(n+1, vector<int>(n+1));
-        elecciones.assign(n, 0);
-        for (int i = 0; i < n; i++){
+        capacidad.assign(n+2, vector<int>(n+2, 0));
+        adj.assign(n+2, vector<int>());
+        for (int i = 1; i < n + 1; i++){
             int x;
             cin >> x;
-            elecciones[i] = x;
+            if(x == 0){
+                adj[0].push_back(i);
+                capacidad[0][i] = 1;
+            } else {
+                adj[n + 1].push_back(i);
+                capacidad[n + 1][i] = 1;
+            }
         }
         for (int i = 0; i < m; i++){
             int u, v;
@@ -78,6 +81,8 @@ int main() {
             capacidad[u][v] = 1;
             capacidad[v][u] = 1;
         }
+        int res = maxflujo(0, n+1);
+        cout << res << "\n";
     }
     return 0;
 } 

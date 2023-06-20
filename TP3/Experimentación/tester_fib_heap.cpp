@@ -163,7 +163,7 @@ int main() {
         auto duration = duration_cast<milliseconds>(end - start);
 
         // Guardar los resultados en el archivo CSV
-        outputFile << n << ',' << m  << ',' << duration.count() << endl;
+        outputFile << m  << ',' << duration.count() << endl;
     }
 
     outputFile.close();

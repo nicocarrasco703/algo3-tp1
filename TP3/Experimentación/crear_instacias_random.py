@@ -33,10 +33,10 @@ def save_test_case(filename, test_case):
 os.makedirs("inputs", exist_ok=True)
 
 # Generar casos de prueba y guardar en archivos de texto
-num_cases = 10000
+num_cases = 4000
 for i in range(num_cases):
-    n = np.random.randint(1, 10001)
-    m = np.random.randint(1, 100001)
+    n = 10000
+    m = n * 10
     k = np.random.randint(1, 301)
     test_case = generate_test_case(n, m, k)
     filename = f"inputs/input_{n}_{m}_{i}.txt"

@@ -103,32 +103,14 @@ void solveProblem(int n, int m, int k, int s, int t, vector<tuple<int, int, ll>>
 }
 
 int main() {
-    vector<string> filenames;
-    const string inputDirectory = "./inputs/";  // Directorio de los archivos de entrada
-    const string outputFilename = "resultados.csv";  // Nombre del archivo CSV de salida
-    ifstream inputFile;
-    ofstream outputFile(outputFilename);
-    if (!outputFile) {
-        cerr << "No se pudo abrir el archivo de salida: " << outputFilename << endl;
-        return 1;
-    }
-
-    namespace fs = std::filesystem;
-    for (const auto &entry : fs::directory_iterator(inputDirectory)) {
-        if (entry.is_regular_file()) {
-            filenames.push_back(entry.path().string());
-        }
-    }
-    
-
-    for (const string &filename : filenames) {
-        inputFile.open(filename);
-
-        if (!inputFile.is_open()) {
-        cout << "Error al abrir el archivo: " << filename << endl;
-        continue; // Pasar al siguiente archivo en caso de error
-        }
-
+    const string outputFilename = "resultados_min_heap.csv";  // Nombre del archivo de salida
+    const string inputFilename = "input.txt";                 // Nombre del archivo de entrada
+    ifstream inputFile(inputFilename);    // Archivo de entrada
+    ofstream outputFile(outputFilename); // Archivo de salida
+    int c; // Cantidad de casos de prueba
+    inputFile >> c; 
+    int i = 0; 
+    while(c--){ 
         int n, m, k, s, t;
         inputFile >> n >> m >> k >> s >> t;
 
@@ -148,8 +130,6 @@ int main() {
             calles_bidireccionales[i] = make_tuple(uj, vj, qj);
         }
 
-        inputFile.close();
-
         // Medir el tiempo de ejecución del código de solución
         auto start = high_resolution_clock::now();
         solveProblem(n, m, k, s, t, calles_unidireccionales, calles_bidireccionales);
@@ -157,9 +137,13 @@ int main() {
         auto duration = duration_cast<milliseconds>(end - start);
 
         // Guardar los resultados en el archivo CSV
-        outputFile << m  << ',' << duration.count() << endl;
+        outputFile << n << ',' << m << ',' << duration.count() << endl;
+
+        i++;
+        cout << "Caso #" << i << " completado." << endl;
     }
 
+    inputFile.close();
     outputFile.close();
 
     cout << "Proceso completado. Los resultados se han guardado en el archivo: " << outputFilename << endl;
